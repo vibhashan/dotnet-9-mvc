@@ -1,9 +1,25 @@
-var builder = WebApplication.CreateBuilder(args);
+using Microsoft.EntityFrameworkCore;
+using MyApp.Data;
+
+// Load environment variables from file
+DotNetEnv.Env.Load();
+
+WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
-var app = builder.Build();
+if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development")
+{
+    // Connect to local db in dev mode
+    builder.Services.AddDbContext<MyAppContext>(options => options.UseOracle(Environment.GetEnvironmentVariable("DEV_DB")));
+}
+else if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Production")
+{
+    builder.Services.AddDbContext<MyAppContext>(options => options.UseOracle(Environment.GetEnvironmentVariable("PROD_DB")));
+}
+
+WebApplication app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())

@@ -1,0 +1,28 @@
+﻿@model Item // or @model MyApp.Models.Item // This is a Razor directive
+@{
+	ViewData["Title"] = "Overview";
+
+	List<string> items = ["Banana", "Apples", "Oranges", "Mangoes"];
+
+	bool isLoggedIn = false;
+}
+<p>This is the name of the item @Model.Id</p>
+
+<ul>
+	@foreach (var item in items)
+	{
+		<li>@item</li>
+	}
+</ul>
+
+@{
+	if (isLoggedIn)
+	{
+		<p>You are logged in</p>
+	}
+	else
+	{
+		<p>You are not logged in</p>
+	}
+}
+
