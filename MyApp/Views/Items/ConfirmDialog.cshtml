@@ -1,0 +1,21 @@
+﻿@model Item;
+@{
+    ViewData["Title"] = "Confirm Delete";
+}
+<div class="modal-body text-center">
+    <p>Are you sure you want to delete this item?</p>
+    <div style="border: 1px solid #ddd; padding: 1rem; border-radius: 0.5rem;">
+        <p><b>Name: </b>@Model.Name</p>
+    </div>
+</div>
+
+<br />
+
+<div class="modal-footer justify-content-center" style="gap: 1rem">
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+
+    <form asp-action="Delete" method="post">
+        <input type="hidden" value=@Model.Id name="id"/>
+        <button type="submit" class="btn btn-primary">Confirm</button>
+    </form>
+</div>

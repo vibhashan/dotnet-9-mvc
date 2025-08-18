@@ -25,19 +25,23 @@ namespace MyApp.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("id");
+                        .HasColumnType("INT")
+                        .HasColumnName("ID");
 
                     OraclePropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("varchar2(100)")
-                        .HasColumnName("name");
+                        .HasColumnType("VARCHAR2(100)")
+                        .HasColumnName("NAME");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("NUMBER")
+                        .HasColumnName("PRICE");
 
                     b.HasKey("Id");
 
-                    b.ToTable("item_tab", (string)null);
+                    b.ToTable("ITEM_TAB", (string)null);
                 });
 #pragma warning restore 612, 618
         }
