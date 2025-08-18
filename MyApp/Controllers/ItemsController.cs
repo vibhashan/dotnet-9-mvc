@@ -1,26 +1,83 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using MyApp.Data;
 using MyApp.Models;
 
 namespace MyApp.Controllers
 {
-    public class ItemsController(MyAppContext appContext) : Controller
+    public class ItemsController(MyAppContext context) : Controller
     {
-        public IActionResult Overview()
+        public async Task<IActionResult> Index()
         {
-            Item item = new()
+            List<Item> items = await context.Items.ToListAsync();
+            return View(items);
+        }
+
+        public async Task<IActionResult> ShowForm([FromRoute] int? id)
+        {
+            if (id is not null)
             {
-                Name = "Keyboard"
-            };
+                Item? item = await context.Items.FirstOrDefaultAsync(i => id == i.Id);
+                return View(item);
+            }
 
-            Console.WriteLine("### " + appContext.Item.Count());
+            return View();
+        }
 
+        public async Task<IActionResult> ConfirmDialog([FromRoute] int id)
+        {
+            Item? item = await context.Items.FirstOrDefaultAsync(i => id == i.Id);
             return View(item);
         }
 
-        public IActionResult Edit([FromRoute] int id)
+        [HttpPost("/create")]
+        public async Task<IActionResult> Create([Bind("Name, Price")] Item item)
         {
-            return Content("id=" + id);
+            if (ModelState.IsValid)
+            {
+                await context.Items.AddAsync(item);
+                await context.SaveChangesAsync();
+
+                return RedirectToAction("Index");
+            }
+
+            return RedirectToAction("ShowForm");
         }
+
+        [HttpPost("/edit")]
+        public async Task<IActionResult> Edit([Bind("Id, Name, Price")] Item item)
+        {
+            if (ModelState.IsValid)
+            {
+                Item? itemToUpdate = await context.Items.FirstOrDefaultAsync(i => i.Id == item.Id);
+
+                if (itemToUpdate is not null)
+                {
+                    itemToUpdate.Name = item.Name;
+                    itemToUpdate.Price = item.Price;
+
+                    await context.SaveChangesAsync();
+
+                    return RedirectToAction(nameof(Index));
+                }
+            }
+
+            return RedirectToAction(nameof(ShowForm));
+        }
+
+        [HttpPost("/delete")]
+        public async Task<IActionResult> Delete([Bind("Id")] int id)
+        {
+            Item? entityToDelete = await context.Items.FirstOrDefaultAsync(i => i.Id == id);
+
+            if (entityToDelete is not null)
+            {
+                context.Items.Remove(entityToDelete);
+                await context.SaveChangesAsync();
+            }
+
+            return RedirectToAction(nameof(Index));
+        }
+
     }
 }

@@ -11,16 +11,17 @@ namespace MyApp.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "item_tab",
+                name: "ITEM_TAB",
                 columns: table => new
                 {
-                    id = table.Column<int>(type: "int", nullable: false)
+                    ID = table.Column<int>(type: "INT", nullable: false)
                         .Annotation("Oracle:Identity", "START WITH 1 INCREMENT BY 1"),
-                    name = table.Column<string>(type: "varchar2(100)", nullable: false)
+                    NAME = table.Column<string>(type: "VARCHAR2(100)", nullable: false),
+                    PRICE = table.Column<decimal>(type: "NUMBER(38,17)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_item_tab", x => x.id);
+                    table.PrimaryKey("PK_ITEM_TAB", x => x.ID);
                 });
         }
 
@@ -28,7 +29,7 @@ namespace MyApp.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "item_tab");
+                name: "ITEM_TAB");
         }
     }
 }

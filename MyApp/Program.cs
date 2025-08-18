@@ -9,15 +9,13 @@ WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
-if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development")
-{
-    // Connect to local db in dev mode
-    builder.Services.AddDbContext<MyAppContext>(options => options.UseOracle(Environment.GetEnvironmentVariable("DEV_DB")));
-}
-else if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Production")
-{
-    builder.Services.AddDbContext<MyAppContext>(options => options.UseOracle(Environment.GetEnvironmentVariable("PROD_DB")));
-}
+// Connect to local db in dev mode
+builder.Services.AddDbContext<MyAppContext>(options => options.UseOracle(
+    Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Production"
+    ? Environment.GetEnvironmentVariable("PROD_DB")
+    : Environment.GetEnvironmentVariable("DEV_DB"))
+);
+
 
 WebApplication app = builder.Build();
 

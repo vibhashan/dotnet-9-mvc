@@ -1,0 +1,49 @@
+﻿@model Item;
+
+@if(Model is null)
+{
+	<h3 style="text-align: center">Create Item</h3>
+
+	<form asp-action="Create" method="post">
+		<div class="form-group">
+			<label for="name">Name</label>
+			<input type="text" class="form-control" id="name" name="name" required>
+		</div>
+
+		<br>
+
+		<div class="form-group">
+			<label for="price">Price</label>
+			<input type="number" class="form-control" id="price" name="price" required>
+		</div>
+
+		<br>
+
+		<button type="submit" class="btn btn-primary">Submit</button>
+	</form>
+}
+else
+{
+	<h3 style="text-align: center">Edit Item</h3>
+
+	<form asp-action="Edit" method="post">
+		<div class="form-group">
+			<label for="name">Name</label>
+			<input type="text" class="form-control" id="name" name="name" required value=@Model.Name>
+		</div>
+
+		<br>
+
+		<div class="form-group">
+			<label for="price">Price</label>
+			<input type="number" class="form-control" id="price" name="price" required value=@Model.Price>
+		</div>
+
+		<input type="hidden" name="id" value=@Model.Id>
+
+		<br>
+
+		<button type="submit" class="btn btn-primary">Save</button>
+	</form>
+}
+
