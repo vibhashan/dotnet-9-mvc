@@ -9,12 +9,21 @@ namespace MyApp.Controllers
     {
         public async Task<IActionResult> Index()
         {
-            List<Item> items = await context.Items.ToListAsync();
+            List<Item> items = await context
+                .Items
+                .Include(s => s.SerialNumber)
+                .Include(c => c.Category)
+                .Include(ic => ic.ItemClients)
+                .ThenInclude(c => c.Client)
+                .ToListAsync();
+
             return View(items);
         }
 
         public async Task<IActionResult> ShowForm([FromRoute] int? id)
         {
+            ViewData["Categories"] = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(context.Categories, "Id", "Name");
+
             if (id is not null)
             {
                 Item? item = await context.Items.FirstOrDefaultAsync(i => id == i.Id);
@@ -31,7 +40,7 @@ namespace MyApp.Controllers
         }
 
         [HttpPost("/create")]
-        public async Task<IActionResult> Create([Bind("Name, Price")] Item item)
+        public async Task<IActionResult> Create([Bind("Name, Price, CategoryId")] Item item)
         {
             if (ModelState.IsValid)
             {
@@ -45,7 +54,7 @@ namespace MyApp.Controllers
         }
 
         [HttpPost("/edit")]
-        public async Task<IActionResult> Edit([Bind("Id, Name, Price")] Item item)
+        public async Task<IActionResult> Edit([Bind("Id, Name, Price, CategoryId")] Item item)
         {
             if (ModelState.IsValid)
             {
@@ -55,6 +64,7 @@ namespace MyApp.Controllers
                 {
                     itemToUpdate.Name = item.Name;
                     itemToUpdate.Price = item.Price;
+                    itemToUpdate.CategoryId = item.CategoryId;
 
                     await context.SaveChangesAsync();
 

@@ -17,6 +17,9 @@
 		<tr style="padding: 10px; border: 1px solid #ddd;">
 			<th style="padding: 10px; border: 1px solid #ddd;">Name</th>
 			<th style="padding: 10px; border: 1px solid #ddd;">Price</th>
+			<th style="padding: 10px; border: 1px solid #ddd;">Serial Number</th>
+			<th style="padding: 10px; border: 1px solid #ddd;">Category</th>
+			<th style="padding: 10px; border: 1px solid #ddd;">Client</th>
 		</tr>
 
 		@foreach (var item in Model)
@@ -24,6 +27,14 @@
 			<tr>
 				<td style="padding: 10px; border: 1px solid #ddd;">@item.Name</td>
 				<td style="padding: 10px; border: 1px solid #ddd;">@item.Price/=</td>
+				<td style="padding: 10px; border: 1px solid #ddd;">@item.SerialNumber?.Number</td>
+				<td style="padding: 10px; border: 1px solid #ddd;">@item.Category?.Name</td>
+				<td style="padding: 10px; border: 1px solid #ddd;">
+					@foreach (var client in item.ItemClients)
+					{
+						@client.Client?.Name
+					}
+				</td>
 				<td>
 					<a asp-action="ShowForm" asp-route-id="@item.Id" class="btn btn-primary">Edit</a>
 				</td>

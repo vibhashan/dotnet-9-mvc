@@ -11,6 +11,14 @@ namespace MyApp.Models
         public required string Name { get; set; }
 
         public double Price { get; set; }
+
+        public int? CategoryId { get; set; }
+
+        public SerialNumber? SerialNumber { get; set; }
+
+        public Category? Category { get; set; }
+
+        public List<ItemClient>? ItemClients { get; set; }
     }
 
     internal class ItemConfiguration : IEntityTypeConfiguration<Item>
@@ -24,7 +32,7 @@ namespace MyApp.Models
             builder
                 .Property(b => b.Id)
                 .HasColumnName("ID")
-                .HasColumnType("INT")
+                .HasColumnType("NUMBER(38,0)")
                 .ValueGeneratedOnAdd();
 
             builder
@@ -38,6 +46,17 @@ namespace MyApp.Models
                 .HasColumnName("PRICE")
                 .HasColumnType("NUMBER")
                 .IsRequired();
+
+            builder
+                .Property(b => b.CategoryId)
+                .HasColumnName("CATEGORY_ID")
+                .HasColumnType("NUMBER(38,0)");
+
+            // 1:N relationship(s)
+            builder
+                .HasOne(b => b.Category)
+                .WithMany(b => b.Items)
+                .HasForeignKey(b => b.CategoryId);
         }
     }
 }
