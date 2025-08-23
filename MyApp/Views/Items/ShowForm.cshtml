@@ -19,6 +19,14 @@
 
 		<br>
 
+		<div class="form-group">
+			<label for="category">Category</label>
+			<select asp-for="CategoryId" asp-items="ViewBag.Categories" class="form-control">
+			</select>
+		</div>
+
+		<br>
+
 		<button type="submit" class="btn btn-primary">Submit</button>
 	</form>
 }
@@ -37,6 +45,14 @@ else
 		<div class="form-group">
 			<label for="price">Price</label>
 			<input type="number" class="form-control" id="price" name="price" required value=@Model.Price>
+		</div>
+
+		<br>
+
+		<div class="form-group">
+			<label for="category">Category</label>
+			<select asp-for="CategoryId" asp-items="ViewBag.Categories" class="form-control">
+			</select>
 		</div>
 
 		<input type="hidden" name="id" value=@Model.Id>
